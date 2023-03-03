@@ -12,7 +12,7 @@ function App() {
   const [themes, setThemes] = useState([])
   const [first, setFirst] = useState(0)
   const value = { themes, setThemes, first, setFirst }
-  console.log(themes)
+  //console.log(themes)
   return (
     <ThemeContext.Provider value={value} >
       <div className="App">

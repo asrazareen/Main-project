@@ -9,7 +9,7 @@
     {
         "name":"survey name",
         "description":"this survey is about the topic",
-        "type":"product",
+        "type":"feedback",
         "startDate":"1-2-2023",
         "endDate":"5-2-2023"
     }

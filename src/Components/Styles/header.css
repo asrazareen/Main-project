@@ -44,6 +44,7 @@
     width:34px;
     height:34px;
     border-radius: 50%;
+    pointer-events: none;
 
 }
 .profile{
@@ -144,5 +145,20 @@
   ul li:hover{
     background-color: #b1c4e9;
     color:#000000;
+    cursor: pointer;
+  }
+
+  .profile-input{
+    position: fixed;
+    width:20px;
+    right:200px;
+    border-radius: 50%;
+    border: none;
+    z-index: 1;
+    /* pointer-events: none; */
+    /* visibility: hidden; */
+    opacity: 0;
+  }
+  .profile-input:hover{
     cursor: pointer;
   }

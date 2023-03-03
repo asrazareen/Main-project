@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import "./Styles/header.css"
-import image from "./images/Asra.jpeg"
+import image from "./images/profile.svg"
 import LogoutIcon from '@mui/icons-material/Logout';
 import { ThemeContext } from "../App";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -10,15 +10,17 @@ const Header = () => {
     const { themes, setThemes, first, setFirst } = useContext(ThemeContext)
     const [open, setOpen] = useState(false)
     const [data,setData] = useState([])
+    const [url,setUrl] = useState("")
+    const [profile,setProfile] = useState("")
     const navigate = useNavigate()
 
     const fetchtheme = async () => {
         await fetch("http://localhost:8080/api/themes")
             .then((res) => res.json())
             .then((data) => {
-                console.log(data.data)
+                //console.log(data.data)
                 setData(data.data)
-                console.log(data)
+                //console.log(data)
             })
     }
 
@@ -27,7 +29,7 @@ const Header = () => {
     },[])
     useEffect(() => {
         fetchtheme()
-        console.log(data)
+        //console.log(data)
     }, [first])
     const handleTheme = async () => {
 
@@ -51,7 +53,47 @@ const Header = () => {
     // setTimeout(() => {
     //     console.log(themes.length)
     // }, 1000)
+    
+    useEffect(() => {
+        console.log(url)
+        if(url){
+            const formData = new FormData();
+        formData.append("image" , url)
+        fetch("http://localhost:8080/profile" , {
+            method:"POST" ,
+            body:formData
+        })
+        fetch("http://localhost:8080/profile" )
+        .then(res => res.json())
+        .then(data => {setProfile(data.image)})
 
+        setUrl("")
+        }
+    },[url])
+
+    useEffect(() => {
+        fetch("http://localhost:8080/profile" )
+        .then(res => res.json())
+        .then(data => {setProfile(data.image[0].image)})
+        console.log(profile) 
+    },[])
+
+    const uploadProfile = (image) => {
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("upload_preset", "profilepic");
+        // formdata.forEach((val,key) => {
+        //     console.log(val,key)})
+        console.log(image)
+        fetch("https://api.cloudinary.com/v1_1/asrazareen/image/upload", {
+            method: "POST",
+            body: formData,
+        })
+            .then(res => res.json())
+            .then(data => {
+                setUrl(data.url);
+            })
+    }
 
     return (
         <div className="container" >
@@ -77,8 +119,9 @@ const Header = () => {
                             </div>
                             
                     </div>
-
-                    <img src={image} alt="profile" className="profile-pic" />
+                    <input type="file" accept="image/*" name="upload profile" className="profile-input" 
+                    onChange={(e) => uploadProfile(e.target.files[0])} />
+                    <img src={profile? profile : image } alt="profile" className="profile-pic" />
                     <div className="logout-div" onClick={() => {navigate("/preview")}}  >
                         <LogoutIcon />
                         Logout

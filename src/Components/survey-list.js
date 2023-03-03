@@ -2,16 +2,25 @@ import React,{useState,useEffect,useContext} from "react";
 import "./Styles/survey-list.css"
 import data from "../data.json"
 import SearchIcon from '@mui/icons-material/Search';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+
 import { ThemeContext } from "../App";
+import Card from "./card";
 // console.log(data)
 const SurveyList = () => {
 
     const {themes,first} = useContext(ThemeContext)
- 
-   
-  
+    const [searchField,setSearchField] = useState("");
+    const [searchshow,setSearchShow] = useState(false)
+ //console.log(searchField)
+   const search = data.filter(
+    search => {
+        return(
+            //console.log(search.type)
+            search.type.toLowerCase().includes(searchField.toLowerCase())
+        )
+    }
+   )
+  //console.log(search)
   
     return (
         <div className={`con ${themes ? `con-${themes}` : null}`} >
@@ -19,7 +28,16 @@ const SurveyList = () => {
                 <div className="sur-con" >
                     <h3 className={`sur ${themes ? `sur-${themes}` : null}`} >Survey List</h3>
                         <SearchIcon className="search" />
-                        <input className={`search-input ${themes ? `search-input-${themes}` : null}`} />
+                        <input className={`search-input ${themes ? `search-input-${themes}` : null}`}
+                        onChange={(e) => {
+                            setSearchField(e.target.value)
+                            if(e.target.value === ""){
+                                setSearchShow(false)
+                            }
+                            else{
+                                setSearchShow(true)
+                            }
+                            }} />
                 </div>
                 <div className={`header-con ${themes ? `header-con-${themes}` : null} `} >
                     <h4>Name</h4>
@@ -29,26 +47,29 @@ const SurveyList = () => {
                     <h4>End Date</h4>
                     <h4 className="action" >Actions</h4>
                 </div>
-                <div className="contain" >
-                    {
-                        data?.map((data,index) => {
+                
+                {
+                    searchshow?(
+                        <div>
+                    { 
+                        search?.map((details,index) => {
                             return(
-                                <div key={index} className={`header-con lists-div ${themes ? `lists-div-${themes}` : null}`} >
-                                 <h6>{data.name}</h6>
-                    <h6>{data.description}</h6>
-                    <h6>{data.type}</h6>
-                    <h6>{data.startDate}</h6>
-                    <h6>{data.endDate}</h6>
-                    <h6>
-                        <EditIcon className="edit-icon" />
-                        <DeleteIcon className="delete-icon" />
-                    </h6>
-                                </div>
+                                <Card details ={details} key={index} />
+                            )
+                           
+                        }
+                            )
+                    }
+                </div>
+                    ):(
+                        data.map((details,index) => {
+                            return(
+                                <Card key={index} details={details} />
                             )
                         })
-                    }
-                   
-                </div>
+                    )
+                }
+                
             </div>
         </div>
     )
