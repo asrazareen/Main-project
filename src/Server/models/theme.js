@@ -10,4 +10,4 @@ const themeSchema = new Schema({
 const thememodel = mongoose.model("theme" , themeSchema)
 
 module.exports = thememodel
- 
+  

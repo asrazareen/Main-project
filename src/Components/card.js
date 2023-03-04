@@ -14,7 +14,7 @@ const Card = ({ details }) => {
                         <div className={`header-con lists-div ${themes ? `lists-div-${themes}` : null}`} >
                     <h6>{details.name}</h6>
                     <h6>{details.description}</h6>
-                    <h6>{details.type}</h6>
+                    <h6>{details.typeofSurvey}</h6>
                     <h6>{details.startDate}</h6>
                     <h6>{details.endDate}</h6>
                     <h6>

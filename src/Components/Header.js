@@ -25,6 +25,10 @@ const Header = () => {
     }
 
     useEffect(() => {
+        const token = sessionStorage.getItem("token")
+        if(!token){
+            navigate("/")
+        }
         setThemes("Default")
     },[])
     useEffect(() => {
@@ -122,7 +126,9 @@ const Header = () => {
                     <input type="file" accept="image/*" name="upload profile" className="profile-input" 
                     onChange={(e) => uploadProfile(e.target.files[0])} />
                     <img src={profile? profile : image } alt="profile" className="profile-pic" />
-                    <div className="logout-div" onClick={() => {navigate("/preview")}}  >
+                    <div className="logout-div" onClick={() => {
+                        sessionStorage.removeItem('token')
+                        navigate("/")}}  >
                         <LogoutIcon />
                         Logout
                     </div>

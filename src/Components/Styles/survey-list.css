@@ -36,6 +36,12 @@
 .sur-con{
     display: flex;
     align-items: center;
+   
+justify-content: space-between;}
+
+.flex{
+    display: flex;
+    align-items: center;
     width:max-content
 }
 .search{
@@ -116,4 +122,8 @@
 .delete-icon:hover{
     color:rgb(251, 84, 84);
     transform: scale(1.2);
+}
+
+.create-btn{
+    float: right;
 }
