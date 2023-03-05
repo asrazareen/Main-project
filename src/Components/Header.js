@@ -15,12 +15,12 @@ const Header = () => {
     const navigate = useNavigate()
 
     const fetchtheme = async () => {
-        await fetch("http://localhost:8080/api/themes")
+        await fetch("https://surveyform-d12y.onrender.com/api/themes")
             .then((res) => res.json())
             .then((data) => {
-                //console.log(data.data)
+               
                 setData(data.data)
-                //console.log(data)
+           
             })
     }
 
@@ -33,7 +33,7 @@ const Header = () => {
     },[])
     useEffect(() => {
         fetchtheme()
-        //console.log(data)
+    
     }, [first])
     const handleTheme = async () => {
 
@@ -43,7 +43,7 @@ const Header = () => {
         else {
             setOpen(false)
         }
-        // console.log(themes[first])
+    
         if (first < data.length- 1) {
             setFirst(first + 1)
         }
@@ -51,23 +51,20 @@ const Header = () => {
             setFirst(0)
         }
 
-        //console.log(first)
+        
     }
 
-    // setTimeout(() => {
-    //     console.log(themes.length)
-    // }, 1000)
-    
+  
     useEffect(() => {
         console.log(url)
         if(url){
             const formData = new FormData();
         formData.append("image" , url)
-        fetch("http://localhost:8080/profile" , {
+        fetch("https://surveyform-d12y.onrender.com/profile" , {
             method:"POST" ,
             body:formData
         })
-        fetch("http://localhost:8080/profile" )
+        fetch("https://surveyform-d12y.onrender.com/profile" )
         .then(res => res.json())
         .then(data => {setProfile(data.image)})
 
@@ -76,7 +73,7 @@ const Header = () => {
     },[url])
 
     useEffect(() => {
-        fetch("http://localhost:8080/profile" )
+        fetch("https://surveyform-d12y.onrender.com/profile" )
         .then(res => res.json())
         .then(data => {setProfile(data.image[0].image)})
         console.log(profile) 
@@ -86,8 +83,7 @@ const Header = () => {
         const formData = new FormData();
         formData.append("file", image);
         formData.append("upload_preset", "profilepic");
-        // formdata.forEach((val,key) => {
-        //     console.log(val,key)})
+ 
         console.log(image)
         fetch("https://api.cloudinary.com/v1_1/asrazareen/image/upload", {
             method: "POST",

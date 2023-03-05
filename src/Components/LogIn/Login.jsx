@@ -7,36 +7,50 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
+    const [message,setMessage] = useState("")
+    const [status,setStatus] = useState("")
 
     async function loginUser(event) {
+
         event.preventDefault();
-        const response = await fetch('http://localhost:8080/user/login', {
+        const formData = new FormData()
+        formData.append("email",email)
+        formData.append("password",password)
+        const response = await fetch('https://surveyform-d12y.onrender.com/user/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': "application/json",
-            },
-            body: JSON.stringify({
-                email,
-                password,
-            })
+            body:formData,
+        
         })
         const data = await response.json()
         setToken(data.token);
         sessionStorage.setItem('token',token);
-        console.log(data);
-        console.log(token);
-
-        if(token) {
-            alert("Login Successfull")
-            navigate('/main')
-        }else {
-            alert('Please Check Username and Password')
-        }
+        setMessage(data.message)
+        setStatus(data.status)
     }
 
     useEffect(() => {
-        sessionStorage.removeItem("token")
-    },[])
+        sessionStorage.setItem("token" ,token)
+    },[token])
+
+   
+
+    useEffect(() =>{
+        if(token) {
+            alert(message)
+            navigate('/main')
+            setMessage("")
+            setStatus("")
+            setEmail("")
+            setPassword("")
+            
+        }else if( message != "") {
+            alert(message)
+            setMessage("")
+            setStatus("")
+            setEmail("")
+            setPassword("")
+        }
+    },[message])
     return (
         <div className="logincontainer">
             <div className='loginregister'>

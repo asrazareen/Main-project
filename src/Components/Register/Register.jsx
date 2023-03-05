@@ -1,6 +1,7 @@
 import './Register.css';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+
 
 function Register() {
     const navigate = useNavigate();
@@ -11,35 +12,53 @@ function Register() {
     const [password, setPassword] = useState('');
     const [confirmpassword, setConfirmpassword] = useState('');
     const [check, setCheck] = useState(false);
+    const [message,setMessage] = useState("")
+    const [status,setStatus] = useState("")
     const handleCheck = () => {
         setCheck(!check);
     }
 
     async function registerUser(event) {
         event.preventDefault();
-        const response = await fetch('http://localhost:8080/user/register', {
+
+        const formData = new FormData()
+        formData.append("name",name)
+        formData.append("email",email)
+        formData.append("phone",phone)
+        formData.append("profession",profession)
+        formData.append("confirmpassword",confirmpassword)
+        formData.append("password",password)
+         formData.forEach((val, key) => {
+        console.log(val,key)
+    })
+        const response = await fetch('https://surveyform-d12y.onrender.com/user/register', {
             method: 'POST',
-            headers: {
-                'Content-Type': "application/json",
-            },
-            body: JSON.stringify({
-                name,
-                email,
-                phone,
-                profession,
-                password,
-                confirmpassword,
-            })
+            body: formData
         })
         const data = await response.json()
-
-        if (data.status === 'password and confirmpassword should be same') {
-            alert("password and confirmpassword should be same")
-            navigate('/register')
-        }else {
-            navigate('/')
-        }
+        setStatus(data.status)
+        setMessage(data.message)
     }
+
+    useEffect(() => {
+        if (status === 'Success') {
+            alert(message)
+            navigate('/register')
+            setMessage('')
+            setStatus("")
+            return
+        }else {
+            alert(message)
+            setMessage("")
+            setName("")
+            setPassword("")
+            setPhone("")
+            setEmail("")
+            setConfirmpassword("")
+            setProfession("")
+            return 
+        }
+    },[message])
 
     return (
         <div className="registercontainer">
@@ -57,7 +76,7 @@ function Register() {
                 <form onSubmit={registerUser}>
                 <div className='inputs'>
                     <input type='text' placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-                    <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <input  placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
                     <br />
                     <div className='rline'>
                         <div className='inline'></div>

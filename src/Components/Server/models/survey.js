@@ -8,8 +8,9 @@ const surveySchema = new mongoose.Schema(
     description: {type: String,require: true,},
     otherCriteria: {type: String,require: true,},
     typeOfSurvey: {type: String,require: true,},
+    user:{type:String}
     // image:{type:String, required:true},
-  },
+  }, 
   { timestamps: true }
 );
 const surveyModel = mongoose.model("survey", surveySchema);

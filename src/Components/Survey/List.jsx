@@ -2,7 +2,8 @@ import './surveylist.css';
 import React, { useEffect, useState,useContext } from 'react'
 import {Link, useNavigate} from 'react-router-dom';
 import { ThemeContext } from '../../App';
-
+import Header from '../Header';
+import Sidebar from '../Sidebar';
 
 
 const List = () => {
@@ -14,16 +15,7 @@ const List = () => {
     const [otherCriteria, setOtherCriteria] = useState('');
     const [url, setUrl] = useState('');
     const navigate = useNavigate();
-    // useEffect(() => {
-    //     const token = sessionStorage.getItem('token');
-    //     if(!token) {
-    //         navigate('/');
-    //     }
-    // },[])
-    // const handleLog = () => {
-    //     sessionStorage.removeItem('token');
-    //     navigate('/');
-    // }
+   
     const {formdata } = useContext(ThemeContext)
     const handleNext = () => {
         if(!name || !description || !TypeofSurvey || !startDate 
@@ -31,7 +23,7 @@ const List = () => {
                 alert("Please enter all fields")
             }
             else{
-              
+              const token = sessionStorage.getItem("token")
                 formdata.append("name" , name)
                 formdata.append("description", description)
                 formdata.append("typeOfSurvey", TypeofSurvey)
@@ -40,14 +32,15 @@ const List = () => {
                 formdata.append("image",url)
                 formdata.append("otherCriteria", otherCriteria)
 
-                fetch("http://localhost:8080/createForm/list" , {
+                fetch("https://surveyform-d12y.onrender.com/createForm/list" , {
                     method:"POST",
-                    body:formdata
+                    body:formdata,
+                    headers:{Authorization:token}
                 }).then((res) => res.json())
                 .then(response=> 
                     navigate("/form" , {state:{id:response.listId}})
                 )
-                //console.log(formdata)
+                
             }
     }
 
@@ -55,9 +48,7 @@ const List = () => {
         const formData = new FormData();
         formData.append("file", image);
         formData.append("upload_preset", "instapost");
-        // formdata.forEach((val,key) => {
-        //     console.log(val,key)})
-        //console.log(image)
+   
         fetch("https://api.cloudinary.com/v1_1/asrazareen/image/upload", {
             method: "POST",
             body: formData,
@@ -67,13 +58,15 @@ const List = () => {
                 setUrl(data.url);
             })
 
-
     }
     return (
+        <>
+        <Header/>
+        <Sidebar/>
         <div className='createsurvey' >
             <div className='header'>
                 <h1>Create Survey</h1>
-                <button id='btnfirst'>Cancel</button>
+                <button id='btnfirst' onClick={() => {navigate("/main")}} >Cancel</button>
                 <button id='lastbtn' onClick={handleNext}  >Next</button>
             </div>
             <div className='inputcontainer'>
@@ -114,6 +107,8 @@ const List = () => {
                 </div>
             </div>
         </div>
+        </>
+        
     )
 }
 

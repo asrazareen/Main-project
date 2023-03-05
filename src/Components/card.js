@@ -4,8 +4,19 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const Card = ({ details }) => {
-    //console.log(details)
-    const { themes } = useContext(ThemeContext)
+
+    
+    const { themes,getData } = useContext(ThemeContext)
+
+   const handleDelete = (id) =>{
+    const token = sessionStorage.getItem("token")
+    fetch(`https://surveyform-d12y.onrender.com/createForm/delete?id=${id}` ,{
+        method:"DELETE",
+        headers:{Authorization:token}
+    }).then((res) => res.json())
+    .then((data)=>{getData()})
+
+   }
     return (
         <div className="hii" >
             <div className="contain" >
@@ -14,12 +25,12 @@ const Card = ({ details }) => {
                         <div className={`header-con lists-div ${themes ? `lists-div-${themes}` : null}`} >
                     <h6>{details.name}</h6>
                     <h6>{details.description}</h6>
-                    <h6>{details.typeofSurvey}</h6>
+                    <h6>{details.typeOfSurvey}</h6>
                     <h6>{details.startDate}</h6>
                     <h6>{details.endDate}</h6>
                     <h6>
-                        <EditIcon className="edit-icon" />
-                        <DeleteIcon className="delete-icon" />
+                        <EditIcon className="edit-icon"  />
+                        <DeleteIcon className="delete-icon" onClick={()=>{handleDelete(details._id)}}/>
                     </h6>
                 </div>
 

@@ -1,5 +1,5 @@
 .con{
-    position: fixed;
+    position: absolute;
     top:70px;
     left:65px;
     height: 100vh;

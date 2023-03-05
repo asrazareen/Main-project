@@ -18,31 +18,44 @@ function App() {
 
   const [themes, setThemes] = useState([])
   const [first, setFirst] = useState(0)
+  const [data,setData]=useState([])
   const formdata = new FormData()
   const questionData = new FormData()
 
-  const value = { themes, setThemes, first, setFirst,formdata,questionData }
+  const getData = () => {
+    const token = sessionStorage.getItem('token')
+    console.log(token)
+    // if (!token) {
+    //   navigate("/")
+    //   alert("Please login ")
+    //   return
+    // }
 
-    formdata.forEach((val, key) => {
-        console.log(val, key)
+    fetch("https://surveyform-d12y.onrender.com/createForm/list", {
+      headers: { Authorization: token }
     })
-  console.log(themes)
+      .then((res) => res.json())
+      .then(data => setData(data.lists))
+
+  }
+  const value = { themes, setThemes, first, setFirst, formdata, questionData, getData,data,setData }
+
   return (
     <ThemeContext.Provider value={value}  >
       <div className="App">
 
         <BrowserRouter>
-        <Header/>
-        <Sidebar/>
+          {/* <Header/>
+        <Sidebar/> */}
           <Routes>
             <Route path='/' element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-              <Route path="/main" element={<SurveyList />} />
-              <Route path="/surveyForm" element={<List />} />
-              <Route path="/preview" element={<Preview />} />
-              <Route path="/form" element={<SurveyForm />} />
-         
+            <Route path="/main" element={<SurveyList />} />
+            <Route path="/surveyForm" element={<List />} />
+            <Route path="/preview" element={<Preview />} />
+            <Route path="/form" element={<SurveyForm />} />
+
 
           </Routes>
         </BrowserRouter>
